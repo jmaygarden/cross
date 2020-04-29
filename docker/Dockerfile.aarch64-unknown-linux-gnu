@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM rustlang/rust:nightly
 
 COPY common.sh /
 RUN /common.sh
@@ -30,3 +30,6 @@ ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
     CXX_aarch64_unknown_linux_gnu=aarch64-linux-gnu-g++ \
     QEMU_LD_PREFIX=/usr/aarch64-linux-gnu \
     RUST_TEST_THREADS=1
+
+RUN rustup target add aarch64-unknown-linux-gnu
+
