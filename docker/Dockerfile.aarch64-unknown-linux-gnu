@@ -29,7 +29,17 @@ ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
     CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc \
     CXX_aarch64_unknown_linux_gnu=aarch64-linux-gnu-g++ \
     QEMU_LD_PREFIX=/usr/aarch64-linux-gnu \
-    RUST_TEST_THREADS=1
+    RUST_TEST_THREADS=1 \
+    PKG_CONFIG_ALLOW_CROSS=1 \
+    CROSS_COMPILE=aarch64-linux-gnu- \
+    ARCH=arm64
 
 RUN rustup target add aarch64-unknown-linux-gnu
+
+RUN git clone https://github.com/openssl/openssl.git /openssl
+WORKDIR /openssl
+RUN git checkout OpenSSL_1_0_2-stable
+RUN ./Configure linux-aarch64 --prefix=/usr/local shared
+RUN make depend && make -j5 && make install
+RUN rm -rf /openssl
 
